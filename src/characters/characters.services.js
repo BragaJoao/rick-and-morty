@@ -30,10 +30,19 @@ const deleteCharacterUrlService = async (id) => {
   return await Character.findByIdAndDelete(id);
 };
 
+// ### Search ###
+const searchCharacterService = (name) =>
+  Character.find({
+    message: { $regex: `${name || ''}`, $options: 'i' },
+  })
+    .sort({ _id: -1 })
+    .populate('user');
+
 module.exports = {
   readAllCharactersUrlService,
   readCharacterByIdUrlService,
   createCharacterUrlService,
   updateCharacterUrlService,
   deleteCharacterUrlService,
+  searchCharacterService,
 };

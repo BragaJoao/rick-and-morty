@@ -73,10 +73,34 @@ const deleteCharacterUrlController = async (req, res) => {
   res.status(200).send({ message: 'Character was successfully deleted' });
 };
 
+const searchCharacterController = async (req, res) => {
+  const { name } = req.query;
+
+  const characters = await characterService.searchCharacterService(name);
+
+  if (characters.length === 0) {
+    return res
+      .status(400)
+      .send({ message: 'There are no characters with this name registered!' });
+  }
+  res.status(200).send({
+    results: characters.map((character) => ({
+      id: character._id,
+      name: character.name,
+      imageUrl: character.imageUrl,
+      /* name: character.user.name, */
+      username: character.user.username,
+      photo: character.user.photo,
+    })),
+});
+}
+
+
 module.exports = {
   readAllCharactersUrlController,
   readCharacterByIdUrlController,
   createCharacterUrlController,
   updateCharacterUrlController,
   deleteCharacterUrlController,
+  searchCharacterController,
 };
