@@ -13,11 +13,9 @@ const readCharacterByIdUrlService = async (id) => {
 };
 
 // ### Create ###
-const createCharacterUrlService = async (character) => {
-  const newCharacter = await Character.create(character);
-  return newCharacter;
-};
-
+const createCharacterUrlService = async (name, imageUrl, userId) =>
+  await Character.create({ name, imageUrl, user: userId });
+  
 // ### Update ###
 const updateCharacterUrlService = async (id, editedCharacter) => {
   const updatedCharacter = await Character.findByIdAndUpdate(
