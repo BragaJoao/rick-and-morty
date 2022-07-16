@@ -1,17 +1,30 @@
 const characterService = require('./characters.services');
 
-// ### ReadAll ### 
+// ### ReadAll ###
 const readAllCharactersUrlController = async (req, res) => {
-  const characters = await characterService.readAllCharactersUrlService();
-  if (characters.length === 0) {
-    return res
-      .status(400)
-      .send({ message: 'There is no character registered!' });
+  try {
+    const characters = await characterService.readAllCharactersUrlService();
+    if (characters.length === 0) {
+      return res
+        .status(400)
+        .send({ message: 'There is no character registered!' });
+    }
+    res.status(200).send({
+      results: characters.map((character) => ({
+        id: character._id,
+        name: character.name,
+        imageUrl: character.imageUrl,
+        /* name: character.user.name, */
+        username: character.user.username,
+        photo: character.user.photo,
+      })),
+    });
+  } catch (err) {
+    res.status(500).send({ message: err.message });
   }
-  res.status(200).send(characters);
 };
 
-// ### ReadById ### 
+// ### ReadById ###
 const readCharacterByIdUrlController = async (req, res) => {
   const id = req.params.id;
   const chosenCharacter = await characterService.readCharacterByIdUrlService(
@@ -23,22 +36,26 @@ const readCharacterByIdUrlController = async (req, res) => {
   res.status(200).send(chosenCharacter);
 };
 
-// ### Create ### 
+// ### Create ###
 const createCharacterUrlController = async (req, res) => {
   try {
-  const {name, imageUrl} = req.body;
+    const { name, imageUrl } = req.body;
 
-  const { id } = await characterService.createCharacterUrlService(name, imageUrl, req.userId);
-  return res.send({
-    message: "Character created successfully!",
-    newCharacter: { id, name, imageUrl },
-  });
-  }catch (err) {
+    const { id } = await characterService.createCharacterUrlService(
+      name,
+      imageUrl,
+      req.userId,
+    );
+    return res.send({
+      message: 'Character created successfully!',
+      newCharacter: { id, name, imageUrl },
+    });
+  } catch (err) {
     res.status(500).send({ message: err.message });
   }
 };
 
-// ### Update ### 
+// ### Update ###
 const updateCharacterUrlController = async (req, res) => {
   const id = req.params.id;
   const editedCharacter = req.body;
@@ -49,7 +66,7 @@ const updateCharacterUrlController = async (req, res) => {
   res.status(200).send(updatedCharacter);
 };
 
-// ### Delete ### 
+// ### Delete ###
 const deleteCharacterUrlController = async (req, res) => {
   const id = req.params.id;
   await characterService.deleteCharacterUrlService(id);
