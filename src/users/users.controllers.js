@@ -1,7 +1,8 @@
 const userService = require('./users.services');
+const authService = require('../auth/auth.services')
 
 const createUserController = async (req, res) => {
-  const { name, username, email, password, avatar } = req.body;
+  const { name, username, email, password, photo } = req.body;
   if (!username || !name || !email || !password) {
     return res.status(400).send({
       message:
@@ -32,7 +33,18 @@ const createUserController = async (req, res) => {
     });
   }
 
-  res.status(201).send(user);
+  const token = authService.generateToken(user.id);
+
+  res.status(201).send({
+    user: {
+      id: user.id,
+      name,
+      username,
+      email,
+      photo,
+    },
+    token,
+  });
 };
 
 const findAllUserController = async (req, res) => {
