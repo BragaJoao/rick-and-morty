@@ -12,6 +12,7 @@ router.get(
 
 router.get(
   '/find/:id',
+  authMiddleware,
   validId,
   characterController.readCharacterByIdUrlController,
 );
@@ -25,6 +26,7 @@ router.post(
 
 router.put(
   '/update/:id',
+  authMiddleware,
   validId,
   validObjectBody,
   characterController.updateCharacterUrlController,
@@ -32,6 +34,7 @@ router.put(
 
 router.delete(
   '/delete/:id',
+  authMiddleware,
   validId,
   characterController.deleteCharacterUrlController,
 );

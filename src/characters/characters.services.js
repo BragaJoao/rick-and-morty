@@ -1,10 +1,12 @@
 const Character = require('./Character');
 
 // ### ReadAll ###
-const readAllCharactersUrlService = async () => {
-  const characters = await Character.find().sort({ _id: -1 }).populate('user');
+const readAllCharactersUrlService = async (offset, limit) => {
+  const characters = await Character.find().sort({ _id: -1 }).skip(offset).limit(limit).populate('user');
   return characters;
 };
+
+const countCharacter = () => Character.countDocuments();
 
 // ### ReadById ###
 const readCharacterByIdUrlService = async (id) => {
@@ -45,4 +47,5 @@ module.exports = {
   updateCharacterUrlService,
   deleteCharacterUrlService,
   searchCharacterService,
+  countCharacter,
 };
