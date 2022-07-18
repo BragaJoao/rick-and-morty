@@ -35,7 +35,7 @@ const deleteCharacterUrlService = async (id) => {
 // ### Search ###
 const searchCharacterService = (name) =>
   Character.find({
-    message: { $regex: `${name || ''}`, $options: 'i' },
+    name: { $regex: `${name || ''}`, $options: 'i' },
   })
     .sort({ _id: -1 })
     .populate('user');

@@ -7,6 +7,10 @@
   },
   "servers": [
     {
+      "url": "https://api-rick-and-morty-joao.herokuapp.com/",
+      "description": "Deploy's URL"
+    },
+    {
       "url": "http://localhost:3001",
       "description": "URL for tests"
     }
@@ -329,7 +333,7 @@
         "parameters": [
           {
             "in": "query",
-            "name": "message",
+            "name": "name",
             "type": "string",
             "required": true
           }

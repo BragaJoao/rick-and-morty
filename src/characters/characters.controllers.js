@@ -119,7 +119,7 @@ const searchCharacterController = async (req, res) => {
       .send({ message: 'There are no characters with this name registered!' });
   }
   res.status(200).send({
-    results: characters.map((character) => ({
+    characters: characters.map((character) => ({
       id: character._id,
       name: character.name,
       imageUrl: character.imageUrl,
