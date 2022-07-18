@@ -36,7 +36,7 @@ No desenvolvimento do projeto foram criadas as rotas de criação de usuário, c
 Tecnologias e linguagens utilizadas no projeto:
 
 * Linguagem: JavaScript e EJS
-* Tecnologias: Express, Nodemon, Mongoose, Cors, Swagger-Ui, Dotenv, bcryptjs, jsonwebtoken
+* Tecnologias: Express, Nodemon, MongoDB, Cors, Swagger-Ui, Dotenv, bcryptjs, jsonwebtoken
 
 ## Autores
 
