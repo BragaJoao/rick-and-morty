@@ -7,17 +7,135 @@
   },
   "servers": [
     {
-      "url": "http://localhost:3001/",
+      "url": "http://localhost:3001",
       "description": "URL for tests"
     }
   ],
   "paths": {
+    "/users/create": {
+      "post": {
+        "summary": "Create a new user.",
+        "description": "This route is used to create a new user",
+        "tags": ["Users"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "$ref": "#/components/schemas/User"
+              },
+              "examples": {
+                "User": {
+                  "value": {
+                    "name": "Thomas da Silva",
+                    "username": "thomas",
+                    "email": "thomas@gmail.com",
+                    "password": "12345",
+                    "photo": "https://avatars.githubusercontent.com/u/103535848?v=4"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "400": {
+            "description": "Not Found"
+          },
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schemma": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users": {
+      "get": {
+        "summary": "Search all users",
+        "description": "Route used to search all users",
+        "tags": ["Users"],
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "400": {
+            "description": "Not Found"
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/User"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "summary": "Login in the website",
+        "description": "Route used to login with an user wich are cadastred.",
+        "tags": ["Auth"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              },
+              "examples": {
+                "User": {
+                  "value": {
+                    "email": "joao@gmail.com",
+                    "password": "12345"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "400": {
+            "description": "Not Found"
+          },
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/characters": {
       "get": {
         "summary": "Show all characters.",
         "description": "Route wich shows all characters.",
         "tags": ["Characters"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "limit",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "offset",
+            "type": "string"
+          }
+        ],
         "responses": {
+          "401": {
+            "description": "Unauthorized"
+          },
           "400": {
             "description": "There is no character registered!"
           },
@@ -42,6 +160,7 @@
         "summary": "Search a character with the ID.",
         "description": "Route wich search a character with the ID.",
         "tags": ["Characters"],
+        "security": [{ "bearerAuth": [] }],
         "parameters": [
           {
             "name": "id",
@@ -51,6 +170,9 @@
           }
         ],
         "responses": {
+          "401": {
+            "description": "Unauthorized"
+          },
           "400": {
             "description": "Character not found!!"
           },
@@ -73,6 +195,7 @@
         "summary": "Create a new character.",
         "description": "Route wich enables to create a new character",
         "tags": ["Characters"],
+        "security": [{ "bearerAuth": [] }],
         "requestBody": {
           "content": {
             "application/json": {
@@ -82,6 +205,7 @@
               "examples": {
                 "Character": {
                   "value": {
+                    "user": "",
                     "name": "Mechanical Rick",
                     "imageUrl": "https://rickandmortyapi.com/api/character/avatar/218.jpeg"
                   }
@@ -91,6 +215,9 @@
           }
         },
         "responses": {
+          "401": {
+            "description": "Unauthorized"
+          },
           "400": {
             "description": "Please complete all required text fields!"
           },
@@ -113,6 +240,7 @@
         "summary": "Edit a character with the ID",
         "description": "Route wich enables to edit a character with the ID.",
         "tags": ["Characters"],
+        "security": [{ "bearerAuth": [] }],
         "parameters": [
           {
             "name": "id",
@@ -139,6 +267,9 @@
           }
         },
         "responses": {
+          "401": {
+            "description": "Unauthorized"
+          },
           "400": {
             "description": "ID invalid or  complete all required text fields."
           },
@@ -164,6 +295,7 @@
         "summary": "Delete a character with the ID.",
         "description": "Route wich enables to delete a character with the ID.",
         "tags": ["Characters"],
+        "security": [{ "bearerAuth": [] }],
         "parameters": [
           {
             "name": "id",
@@ -173,6 +305,9 @@
           }
         ],
         "responses": {
+          "401": {
+            "description": "Unauthorized"
+          },
           "400": {
             "description": "ID Invalid!"
           },
@@ -184,13 +319,70 @@
           }
         }
       }
+    },
+    "/characters/search": {
+      "get": {
+        "summary": "Search a character",
+        "description": "Route used to search a character with query params.",
+        "tags": ["Characters"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "message",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
+          },
+          "400": {
+            "description": "Not Found"
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Character"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
     "schemas": {
+      "User": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "username": { "type": "string" },
+          "email": { "type": "string" },
+          "password": { "type": "string" },
+          "photo": { "type": "string" }
+        }
+      },
       "Character": {
         "type": "object",
         "properties": {
+          "user": {
+            "type": "string"
+          },
           "name": {
             "type": "string"
           },
