@@ -2,7 +2,11 @@ const Character = require('./Character');
 
 // ### ReadAll ###
 const readAllCharactersUrlService = async (offset, limit) => {
-  const characters = await Character.find().sort({ _id: -1 }).skip(offset).limit(limit).populate('user');
+  const characters = await Character.find()
+    .sort({ _id: -1 })
+    .skip(offset)
+    .limit(limit)
+    .populate('user');
   return characters;
 };
 
